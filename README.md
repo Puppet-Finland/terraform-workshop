@@ -41,12 +41,12 @@ You should be able to accomplish this task with the following Terraform resource
 * [aws_subnet](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet) (implemented)
 * [aws_internet_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway) (missing)
 * [aws_route_table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table) (missing, use inline routes)
-* [aws_route_table_association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association)
+* [aws_route_table_association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association) (missing)
 * [aws_instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance) (partially implemented)
 * [aws_security_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) (missing, use inline ingress and egress rules)
 
-Installation and configuration of the web server software (e.g. apache or nginx)
-is done by passing a user_data script to the
+Installation and configuration of the web server software (nginx) is done by
+passing a user_data script to the
 [aws_instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance)
 resource using the
 [template_file function](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file).
@@ -57,7 +57,13 @@ More details on user_data in AWS is available [here](https://docs.aws.amazon.com
 If you run the sample code you will get a VPC, two subnets and one EC2 instance (VM). However, you are not able to access the EC2 instance in any way. This is because of several reasons:
 
 * The VPC does not have an Internet gateway. One is needed to route traffic to the Internet
-* The VPC does not have a routing table with a catch-all route (0.0.0.0/0) that would enable the EC2 instance to route traffic to the Internet
+* The VPC does not have a routing table with a catch-all route (0.0.0.0/0) that would enable the EC2 instance to realize that if packets are not aimed at the VPC, they should be sent to the Internet gateway.
 * The routing table (above) is not associated with the VPC subnets (primary and secondary)
 * No security groups are attached to the EC2 instance
-* The (missing) security group(s) do not allow access to TCP port 80 from the Internet (0.0.0.0/0)
+* The (missing) security group(s) need to allow access to TCP port 80 from the Internet (0.0.0.0/0)
+
+If you successfully implement all the code you will see a "Hello World"-style webpage at
+
+```
+http://<public-ip-of-your-instance>
+```
