@@ -1,20 +1,28 @@
 provider "aws" {
-  # If you run into issues with the VPC limit change this region. Region names are listed here:
+  # Select values for the region from this list:
   #
-  # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-regions
+  # eu-central-1
+  # eu-north-1
+  # eu-south-1
+  # eu-west-1
+  # eu-west-2
+  # eu-west-3
   #
+  # Make sure the value matches the value of region parameter in variables.tf
   region = "eu-central-1"
 }
 
 terraform {
-  required_version = "> 0.14.0"
+  required_version = "= 0.15.0"
 
   backend "s3" {
+    # Do not change these two values
     bucket = "terraform-state-test-aws.puppeteers.net"
     region = "eu-central-1"
 
-    # Change this "key" to match your name or alias. Avoid special characters.
-    # This ensures that your state file does not collide with somebody else's
+    # Change this "key" to match your alias or nickname. Avoid special
+    # characters.  This ensures that your state file does not collide with
+    # somebody else's
     key    = "your-alias"
   }
 }
