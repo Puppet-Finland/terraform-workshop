@@ -13,7 +13,19 @@ This is a Terraform skeleton repository for Terraform workshops.
     * main.tf: in *provider* block change the *region* if Terraform tells you that the VPC limit has exceeded. By default AWS limits number of VPC to five per region.
     * variables.tf: in the *region* variable change *default* to match the above (if you changed it)
     * variables.tf: change the second number in the commented out default values of the cidr_block variables to a random value between 1 and 254, then uncomment the lines. This prevents VPC/subnet blocks created by others from overlapping yours and causing problems.
-* Run "terraform init" to initialize your Terraform root module (creates ./.terraform directory)
+
+Then create $HOME/.aws/credentials (Linux, BSD, MacOS) or
+%USERPROFILE%/.aws/credentials (Windows) with the following content:
+
+    [default]
+    aws_access_key_id=your-access-key-id
+    aws_secret_access_key=your-secret-access-key
+
+Now you should be able to go back to the root of the repository and initialize the Terraform root module:
+
+    terraform init
+
+This creates ./.terraform directory with all the plugins and metadata.
 
 # Updating to latest version of this code
 
