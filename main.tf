@@ -9,12 +9,18 @@ provider "aws" {
   # eu-west-3
   #
   # Make sure the value matches the value of region parameter in variables.tf
-  region = "eu-central-1"
+  region = "eu-west-2"
 }
 
 terraform {
   required_version = "= 0.15.0"
 
+  # Uncomment this to enable the local file state backend
+  #backend "local" {
+  #  path = "local.tfstate"
+  #}
+
+  # Comment this backend if you wish to use the local backend
   backend "s3" {
     # Do not change these two values
     bucket = "terraform-state-test-aws.puppeteers.net"

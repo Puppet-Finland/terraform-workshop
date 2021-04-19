@@ -97,3 +97,144 @@ If you successfully implement all the code you will see a "Hello World"-style we
 ```
 http://<public-ip-of-your-instance>
 ```
+
+# Known issues
+
+* Creating the aws_instance may fail in some regions, probably due to incompatible default values for the aws_instance. This problem has not been looked into in depth.
+* Modifying routing tables seems to fail. Use "terraform destroy" followed by "terraform apply" to resolve the problem. The proper solution would be to add an IAM permission to the policy.
+
+# Running the workshop code on your own AWS account
+
+If you want to run this workshop's code on your own AWS account you need two things:
+
+* Credit card (for the AWS account)
+* AWS account
+
+Once you have your AWS account ready you need to:
+
+* Go to the IAM service
+    * Create a new IAM policy (e.g. "terraform") with contents from the example below
+    * Create an IAM user (e.g. "terraform") with (at minimum) programmatic access
+    * Create an API keypair for the user
+* In main.tf: comment out the S3 backend in main.tf and uncomment the local backend
+* Run "terraform init" again to initialize the local backend
+
+If you want more challenge set up a S3 bucket for state file storage and modify
+the example IAM policy to point to the correct S3 bucket.
+
+## Example IAM policy
+
+Here's a sample IAM policy you can use to run the workshop. If you use a
+[local state file backend](https://www.terraform.io/docs/language/settings/backends/local.html)
+you can skip the S3 section at the bottom. If you *do* use the
+[S3 backend](https://www.terraform.io/docs/language/settings/backends/s3.html) then
+you need to modify the bucket name to match your S3 bucket.
+
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Sid": "VisualEditor0",
+                "Effect": "Allow",
+                "Action": [
+                    "ec2:AllocateAddress",
+                    "ec2:AssociateAddress",
+                    "ec2:AssociateRouteTable",
+                    "ec2:AttachInternetGateway",
+                    "ec2:AttachVolume",
+                    "ec2:AuthorizeSecurityGroupEgress",
+                    "ec2:AuthorizeSecurityGroupIngress",
+                    "ec2:CopyImage",
+                    "ec2:CreateImage",
+                    "ec2:CreateInternetGateway",
+                    "ec2:CreateKeyPair",
+                    "ec2:CreateNetworkInterface",
+                    "ec2:CreateRoute",
+                    "ec2:CreateRouteTable",
+                    "ec2:CreateSecurityGroup",
+                    "ec2:CreateSnapshot",
+                    "ec2:CreateSubnet",
+                    "ec2:CreateTags",
+                    "ec2:CreateVolume",
+                    "ec2:CreateVpc",
+                    "ec2:DeleteInternetGateway",
+                    "ec2:DeleteKeyPair",
+                    "ec2:DeleteNetworkInterface",
+                    "ec2:DeleteRouteTable",
+                    "ec2:DeleteSecurityGroup",
+                    "ec2:DeleteSnapshot",
+                    "ec2:DeleteSubnet",
+                    "ec2:DeleteTags",
+                    "ec2:DeleteVolume",
+                    "ec2:DeleteVpc",
+                    "ec2:DeregisterImage",
+                    "ec2:DescribeAccountAttributes",
+                    "ec2:DescribeAddresses",
+                    "ec2:DescribeIamInstanceProfileAssociations",
+                    "ec2:DescribeImageAttribute",
+                    "ec2:DescribeImages",
+                    "ec2:DescribeInstanceAttribute",
+                    "ec2:DescribeInstanceCreditSpecifications",
+                    "ec2:DescribeInstances",
+                    "ec2:DescribeInstances",
+                    "ec2:DescribeInternetGateways",
+                    "ec2:DescribeKeyPairs",
+                    "ec2:DescribeNetworkAcls",
+                    "ec2:DescribeNetworkInterfaces",
+                    "ec2:DescribeRegions",
+                    "ec2:DescribeRouteTables",
+                    "ec2:DescribeSecurityGroupReferences",
+                    "ec2:DescribeSecurityGroups",
+                    "ec2:DescribeSnapshots",
+                    "ec2:DescribeStaleSecurityGroups",
+                    "ec2:DescribeSubnets",
+                    "ec2:DescribeTags",
+                    "ec2:DescribeVolumes",
+                    "ec2:DescribeVolumes",
+                    "ec2:DescribeVpcAttribute",
+                    "ec2:DescribeVpcClassicLink",
+                    "ec2:DescribeVpcClassicLinkDnsSupport",
+                    "ec2:DescribeVpcPeeringConnections",
+                    "ec2:DescribeVpcs",
+                    "ec2:DetachInternetGateway",
+                    "ec2:DetachVolume",
+                    "ec2:DisassociateAddress",
+                    "ec2:DisassociateRouteTable",
+                    "ec2:GetPasswordData",
+                    "ec2:ImportKeyPair",
+                    "ec2:ModifyImageAttribute",
+                    "ec2:ModifyInstanceAttribute",
+                    "ec2:ModifyNetworkInterfaceAttribute",
+                    "ec2:ModifySnapshotAttribute",
+                    "ec2:ModifySubnetAttribute",
+                    "ec2:ModifyVpcAttribute",
+                    "ec2:RebootInstances",
+                    "ec2:RegisterImage",
+                    "ec2:ReplaceIamInstanceProfileAssociation",
+                    "ec2:RevokeSecurityGroupEgress",
+                    "ec2:RevokeSecurityGroupIngress",
+                    "ec2:RunInstances",
+                    "ec2:StartInstances",
+                    "ec2:StartInstances",
+                    "ec2:StopInstances",
+                    "ec2:TerminateInstances",
+                    "ec2:UpdateSecurityGroupRuleDescriptionsEgress",
+                    "ec2:UpdateSecurityGroupRuleDescriptionsIngress"
+                ],
+                "Resource": "*"
+            },
+            {
+                "Sid": "VisualEditor1",
+                "Effect": "Allow",
+                "Action": [
+                    "s3:PutObject",
+                    "s3:GetObject",
+                    "s3:ListBucket"
+                ],
+                "Resource": [
+                    "arn:aws:s3:::terraform-state-test-aws.puppeteers.net",
+                    "arn:aws:s3:::terraform-state-test-aws.puppeteers.net/*"
+                ]
+            }
+        ]
+    }
