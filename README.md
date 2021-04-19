@@ -15,6 +15,14 @@ This is a Terraform skeleton repository for Terraform workshops.
     * variables.tf: change the second number in the commented out default values of the cidr_block variables to a random value between 1 and 254, then uncomment the lines. This prevents VPC/subnet blocks created by others from overlapping yours and causing problems.
 * Run "terraform init" to initialize your Terraform root module (creates ./.terraform directory)
 
+# Updating to latest version of this code
+
+To update to latest version of this code run
+
+    git pull
+
+from within this repository.
+
 # Running Terraform
 
 To see what Terraform *would* do:
