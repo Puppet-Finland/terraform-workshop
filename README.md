@@ -4,8 +4,10 @@ This is a Terraform skeleton repository for Terraform workshops.
 
 # Preparations
 
+* Install Git
 * Install latest Terraform 0.14.x
 * Clone this repository
+    * git clone https://github.com/Puppet-Finland/terraform-workshop.git
 * Make some changes to the files
     * main.tf: in *terraform* block change the *key* to match your alias/nickname
     * main.tf: in *provider* block change the *region* if Terraform tells you that the VPC limit has exceeded. By default AWS limits number of VPC to five per region.
@@ -60,7 +62,7 @@ If you run the sample code you will get a VPC, two subnets and one EC2 instance 
 * The VPC does not have a routing table with a catch-all route (0.0.0.0/0) that would enable the EC2 instance to realize that if packets are not aimed at the VPC, they should be sent to the Internet gateway.
 * The routing table (above) is not associated with the VPC subnets (primary and secondary)
 * No security groups are attached to the EC2 instance
-* The (missing) security group(s) need to allow access to TCP port 80 from the Internet (0.0.0.0/0)
+* The (missing) security group(s) need to allow inbound (ingress) traffic to TCP port 80 from the anywhere (0.0.0.0/0) and outbound (egress) traffic to anywhere (0.0.0.0/0)
 
 If you successfully implement all the code you will see a "Hello World"-style webpage at
 
