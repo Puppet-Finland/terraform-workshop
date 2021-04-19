@@ -49,6 +49,14 @@ To show outputs (public IP of the webserver):
 
     terraform output
 
+To show all resources currently managed by Terraform and their attributes:
+
+    terraform show
+
+To destroy the infrastructure when you're done with it:
+
+    terraform destroy
+
 # Goal of the workshop
 
 The goal is to create a web server in AWS inside a *new* VPC (Virtual Private
